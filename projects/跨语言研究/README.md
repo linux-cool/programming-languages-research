@@ -35,6 +35,7 @@
 
 - `cross_language_interface.c` - 跨语言接口示例
 - `python_c_binding.py` - Python与C互操作示例
+- `algorithm_research.cpp` - C++算法研究与LeetCode解析
 - `README.md` - 项目说明文档
 
 ## 研究成果
