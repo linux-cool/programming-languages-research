@@ -1,0 +1,164 @@
+version: '3.8'
+
+services:
+  # DevOpsHub主服务
+  devopshub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: devopshub-main
+    hostname: devopshub
+    environment:
+      - DEVOPS_ENV=development
+      - DEVOPS_LOG_LEVEL=DEBUG
+    volumes:
+      # 挂载配置文件
+      - ./config:/opt/devopshub/config:ro
+      # 挂载数据目录
+      - devopshub_data:/opt/devopshub/data
+      # 挂载Docker socket (用于容器管理)
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    networks:
+      - devopshub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "./bin/devops-hub", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 数据库服务 (用于高级功能)
+  database:
+    image: postgres:15-alpine
+    container_name: devopshub-db
+    environment:
+      - POSTGRES_DB=devopshub
+      - POSTGRES_USER=devops
+      - POSTGRES_PASSWORD=devops123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - devopshub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devops -d devopshub"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis缓存服务
+  redis:
+    image: redis:7-alpine
+    container_name: devopshub-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - devopshub-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # 监控服务 (Prometheus)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: devopshub-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - devopshub-network
+    restart: unless-stopped
+
+  # 可视化服务 (Grafana)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: devopshub-grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3000:3000"
+    networks:
+      - devopshub-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # 日志收集服务 (Fluentd)
+  fluentd:
+    image: fluent/fluentd:v1.16-debian-1
+    container_name: devopshub-fluentd
+    volumes:
+      - ./logging/fluentd.conf:/fluentd/etc/fluent.conf:ro
+      - devopshub_data:/opt/devopshub/data:ro
+      - fluentd_data:/fluentd/log
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      - devopshub-network
+    restart: unless-stopped
+
+  # Web界面服务 (Nginx)
+  nginx:
+    image: nginx:alpine
+    container_name: devopshub-nginx
+    volumes:
+      - ./web/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./web/html:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - devopshub-network
+    restart: unless-stopped
+    depends_on:
+      - devopshub
+
+# 网络配置
+networks:
+  devopshub-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# 数据卷配置
+volumes:
+  devopshub_data:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  fluentd_data:
+    driver: local

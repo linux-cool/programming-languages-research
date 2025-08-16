@@ -1,0 +1,26 @@
+# 数据文件
+data/logs/*
+data/cache/*
+data/db/*
+!data/logs/.gitkeep
+!data/cache/.gitkeep
+!data/db/.gitkeep
+
+# 临时文件
+*.tmp
+*.log
+*.pid
+
+# 备份文件
+*.bak
+*~
+
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db

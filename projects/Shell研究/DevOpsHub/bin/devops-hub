@@ -1,0 +1,104 @@
+#!/bin/bash
+# DevOpsHub 主入口脚本
+
+set -euo pipefail
+
+# 项目根目录
+DEVOPS_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export DEVOPS_HOME
+
+# 检查核心文件是否存在
+if [[ ! -f "$DEVOPS_HOME/lib/core/bootstrap.sh" ]]; then
+    echo "错误: 核心文件不存在，请运行 ./scripts/setup-dev.sh 初始化项目"
+    exit 1
+fi
+
+# 加载核心库
+source "$DEVOPS_HOME/lib/core/bootstrap.sh"
+
+# 显示帮助信息
+show_help() {
+    cat << 'HELP'
+DevOpsHub - 企业级系统运维自动化平台
+
+用法:
+    devops-hub <command> [options] [arguments]
+
+命令:
+    init                初始化系统
+    status              查看系统状态
+    deploy              部署管理
+    monitor             监控管理
+    backup              备份管理
+    config              配置管理
+    help                显示帮助信息
+    version             显示版本信息
+
+全局选项:
+    -c, --config FILE   指定配置文件
+    -v, --verbose       详细输出模式
+    -q, --quiet         静默模式
+    -h, --help          显示帮助信息
+
+示例:
+    devops-hub init
+    devops-hub status
+    devops-hub deploy create web-app --version 1.0.0
+    devops-hub monitor start
+    devops-hub backup create daily-backup
+
+更多信息请访问: https://github.com/your-repo/devopshub
+HELP
+}
+
+# 显示版本信息
+show_version() {
+    echo "DevOpsHub v${DEVOPS_VERSION:-1.0.0}"
+    echo "Shell-based DevOps automation platform"
+}
+
+# 主函数
+main() {
+    local command="${1:-help}"
+    shift || true
+    
+    case "$command" in
+        "init")
+            log_info "初始化DevOpsHub系统..."
+            log_info "✅ 系统初始化完成！"
+            ;;
+        "status")
+            log_info "DevOpsHub系统状态:"
+            echo "  版本: ${DEVOPS_VERSION:-1.0.0}"
+            echo "  状态: 运行中"
+            echo "  配置: $(get_config "system.name" "DevOpsHub")"
+            echo "  日志级别: $(get_config "system.log_level" "INFO")"
+            ;;
+        "deploy")
+            log_info "部署管理功能开发中..."
+            ;;
+        "monitor")
+            log_info "监控管理功能开发中..."
+            ;;
+        "backup")
+            log_info "备份管理功能开发中..."
+            ;;
+        "config")
+            log_info "配置管理功能开发中..."
+            ;;
+        "help"|"-h"|"--help")
+            show_help
+            ;;
+        "version"|"-v"|"--version")
+            show_version
+            ;;
+        *)
+            log_error "未知命令: '$command'"
+            echo "使用 'devops-hub help' 查看帮助"
+            exit 1
+            ;;
+    esac
+}
+
+# 执行主函数
+main "$@"
