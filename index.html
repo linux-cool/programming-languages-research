@@ -23,56 +23,50 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1 class="site-title">编程语言研究项目</h1>
-                <p class="site-subtitle">C/C++/Python/Shell编程语言深度研究</p>
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h1>编程语言研究项目</h1>
+                </div>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="#home" class="nav-link">首页</a>
+                    <a href="#projects" class="nav-link">项目</a>
+                    <a href="#about" class="nav-link">关于</a>
+                </div>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number" id="total-projects">0</span>
-                    <span class="stat-label">研究项目</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="category-count">0</span>
-                    <span class="stat-label">研究领域</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="year-count">0</span>
-                    <span class="stat-label">研究年限</span>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">编程语言研究项目</h1>
+                <p class="hero-subtitle">C/C++/Python/Shell编程语言深度研究</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-projects">0</span>
+                        <span class="stat-label">研究项目</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="category-count">0</span>
+                        <span class="stat-label">研究领域</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="year-count">0</span>
+                        <span class="stat-label">研究年限</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Search and Filter Section -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" id="search-input" placeholder="搜索项目..." class="search-input">
-                    <button class="search-btn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-                <div class="filter-container">
-                    <select id="category-filter" class="filter-select">
-                        <option value="">所有领域</option>
-                    </select>
-                    <select id="year-filter" class="filter-select">
-                        <option value="">所有年份</option>
-                    </select>
-                    <button id="clear-filters" class="clear-btn">清除筛选</button>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Projects Section -->
     <section id="projects" class="projects">
@@ -84,9 +78,7 @@
             <div class="projects-grid" id="projects-grid">
                 <!-- 项目将在这里动态加载 -->
             </div>
-            <div class="no-results" id="no-results" style="display: none;">
-                <p>没有找到匹配的项目</p>
-            </div>
+
         </div>
     </section>
 
@@ -592,7 +584,32 @@
             console.log('DOM加载完成，开始初始化...');
             portfolio = new ProgrammingLanguagesPortfolio();
             window.portfolio = portfolio;
+
+            // 初始化导航栏
+            initNavigation();
         });
+
+        // 导航栏功能
+        function initNavigation() {
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+
+                // 点击导航链接时关闭移动端菜单
+                const navLinks = document.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navMenu.classList.remove('active');
+                        navToggle.classList.remove('active');
+                    });
+                });
+            }
+        }
         
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

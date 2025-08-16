@@ -3,13 +3,7 @@
 class ResearchPortfolio {
     constructor() {
         this.projects = [];
-        this.filteredProjects = [];
-        this.currentFilters = {
-            search: '',
-            category: '',
-            year: ''
-        };
-        
+
         this.init();
     }
     
@@ -18,14 +12,12 @@ class ResearchPortfolio {
         this.setupEventListeners();
         this.renderProjects();
         this.updateStats();
-        this.updateFilters();
     }
     
     async loadProjects() {
         try {
             const response = await fetch('projects/projects.json');
             this.projects = await response.json();
-            this.filteredProjects = [...this.projects];
             console.log('成功加载', this.projects.length, '个项目');
         } catch (error) {
             console.error('Error loading projects:', error);
@@ -107,32 +99,7 @@ class ResearchPortfolio {
     }
     
     setupEventListeners() {
-        // Search functionality
-        const searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('input', (e) => {
-            this.currentFilters.search = e.target.value;
-            this.filterProjects();
-        });
-        
-        // Category filter
-        const categoryFilter = document.getElementById('category-filter');
-        categoryFilter.addEventListener('change', (e) => {
-            this.currentFilters.category = e.target.value;
-            this.filterProjects();
-        });
-        
-        // Year filter
-        const yearFilter = document.getElementById('year-filter');
-        yearFilter.addEventListener('change', (e) => {
-            this.currentFilters.year = e.target.value;
-            this.filterProjects();
-        });
-        
-        // Clear filters
-        const clearBtn = document.getElementById('clear-filters');
-        clearBtn.addEventListener('change', () => {
-            this.clearFilters();
-        });
+
         
         // Modal functionality
         this.setupModal();
@@ -172,81 +139,23 @@ class ResearchPortfolio {
         });
     }
     
-    filterProjects() {
-        this.filteredProjects = this.projects.filter(project => {
-            const matchesSearch = !this.currentFilters.search || 
-                project.title.toLowerCase().includes(this.currentFilters.search.toLowerCase()) ||
-                project.description.toLowerCase().includes(this.currentFilters.search.toLowerCase()) ||
-                project.tags.some(tag => tag.toLowerCase().includes(this.currentFilters.search.toLowerCase()));
-            
-            const matchesCategory = !this.currentFilters.category || 
-                project.category === this.currentFilters.category;
-            
-            const matchesYear = !this.currentFilters.year || 
-                project.year.toString() === this.currentFilters.year;
-            
-            return matchesSearch && matchesCategory && matchesYear;
-        });
-        
-        this.renderProjects();
-        this.updateFilters();
-    }
+
     
-    clearFilters() {
-        this.currentFilters = {
-            search: '',
-            category: '',
-            year: ''
-        };
-        
-        document.getElementById('search-input').value = '';
-        document.getElementById('category-filter').value = '';
-        document.getElementById('year-filter').value = '';
-        
-        this.filteredProjects = [...this.projects];
-        this.renderProjects();
-        this.updateFilters();
-    }
+
+
+
     
-    updateFilters() {
-        // Update category filter options
-        const categoryFilter = document.getElementById('category-filter');
-        const categories = [...new Set(this.projects.map(p => p.category))];
-        
-        categoryFilter.innerHTML = '<option value="">所有领域</option>';
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-        });
-        
-        // Update year filter options
-        const yearFilter = document.getElementById('year-filter');
-        const years = [...new Set(this.projects.map(p => p.year))].sort((a, b) => b - a);
-        
-        yearFilter.innerHTML = '<option value="">所有年份</option>';
-        years.forEach(year => {
-            const option = document.createElement('option');
-            option.value = year;
-            option.textContent = year;
-            yearFilter.appendChild(option);
-        });
-    }
+
     
     renderProjects() {
         const projectsGrid = document.getElementById('projects-grid');
-        const noResults = document.getElementById('no-results');
-        
-        if (this.filteredProjects.length === 0) {
+
+        if (this.projects.length === 0) {
             projectsGrid.innerHTML = '<p>正在加载项目...</p>';
-            noResults.style.display = 'block';
             return;
         }
-        
-        noResults.style.display = 'none';
-        
-        projectsGrid.innerHTML = this.filteredProjects.map(project => `
+
+        projectsGrid.innerHTML = this.projects.map(project => `
             <div class="project-card">
                 <div class="project-image">
                     ${project.image}
