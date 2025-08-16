@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .project-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .project-title { font-weight: bold; color: #2563eb; }
+        .project-category { color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>编程语言研究项目测试页面</h1>
+    
+    <div class="test-section">
+        <h2>项目数据加载测试</h2>
+        <div id="projects-test"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>JavaScript功能测试</h2>
+        <button onclick="testLoadProjects()">测试加载项目</button>
+        <button onclick="testRenderProjects()">测试渲染项目</button>
+        <div id="test-output"></div>
+    </div>
+
+    <script>
+        // 简化的测试代码
+        let projects = [];
+        
+        async function testLoadProjects() {
+            try {
+                const response = await fetch('projects/projects.json');
+                projects = await response.json();
+                document.getElementById('test-output').innerHTML = 
+                    `<p style="color: green;">✅ 成功加载 ${projects.length} 个项目</p>
+                     <p>第一个项目: ${projects[0].title}</p>`;
+            } catch (error) {
+                document.getElementById('test-output').innerHTML = 
+                    `<p style="color: red;">❌ 加载失败: ${error.message}</p>`;
+            }
+        }
+        
+        function testRenderProjects() {
+            if (projects.length === 0) {
+                document.getElementById('test-output').innerHTML = 
+                    '<p style="color: orange;">⚠️ 请先加载项目数据</p>';
+                return;
+            }
+            
+            const container = document.getElementById('projects-test');
+            container.innerHTML = '<h3>项目列表:</h3>';
+            
+            projects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="project-title">${project.title}</div>
+                    <div class="project-category">${project.category}</div>
+                    <p>${project.description}</p>
+                `;
+                container.appendChild(card);
+            });
+            
+            document.getElementById('test-output').innerHTML = 
+                `<p style="color: green;">✅ 成功渲染 ${projects.length} 个项目</p>`;
+        }
+        
+        // 页面加载完成后自动测试
+        window.addEventListener('load', () => {
+            document.getElementById('test-output').innerHTML = 
+                '<p>页面加载完成，请点击测试按钮</p>';
+        });
+    </script>
+</body>
+</html>

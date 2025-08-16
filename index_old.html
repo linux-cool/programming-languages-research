@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编程语言研究项目展示 - Programming Languages Research Portfolio</title>
+    <meta name="description" content="个人研究项目展示网站，包含各种研究领域的项目介绍和成果展示">
+    <meta name="keywords" content="研究项目,学术展示,项目作品集,科研成果,个人网站">
+    <meta name="author" content="Research Portfolio">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/research-portfolio/">
+    <meta property="og:title" content="研究项目展示 - Research Portfolio">
+    <meta property="og:description" content="个人研究项目展示网站，包含各种研究领域的项目介绍和成果展示">
+    <meta property="og:image" content="https://yourusername.github.io/research-portfolio/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourusername.github.io/research-portfolio/">
+    <meta property="twitter:title" content="研究项目展示 - Research Portfolio">
+    <meta property="twitter:description" content="个人研究项目展示网站，包含各种研究领域的项目介绍和成果展示">
+    <meta property="twitter:image" content="https://yourusername.github.io/research-portfolio/images/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h1>Research Portfolio</h1>
+                </div>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="#home" class="nav-link">首页</a>
+                    <a href="#projects" class="nav-link">项目</a>
+                    <a href="#about" class="nav-link">关于</a>
+                </div>
+                <div class="nav-toggle" id="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">欢迎来到我的研究世界</h1>
+                <p class="hero-subtitle">探索创新思维，分享研究成果，连接知识边界</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="project-count">0</span>
+                        <span class="stat-label">研究项目</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="category-count">0</span>
+                        <span class="stat-label">研究领域</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="year-count">0</span>
+                        <span class="stat-label">研究年限</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="搜索项目..." class="search-input">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="filter-container">
+                    <select id="category-filter" class="filter-select">
+                        <option value="">所有领域</option>
+                    </select>
+                    <select id="year-filter" class="filter-select">
+                        <option value="">所有年份</option>
+                    </select>
+                    <button id="clear-filters" class="clear-btn">清除筛选</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2>研究项目</h2>
+                <p>探索我在各个领域的研究成果和项目经验</p>
+            </div>
+            <div class="projects-grid" id="projects-grid">
+                <!-- Projects will be dynamically loaded here -->
+            </div>
+            <div class="no-results" id="no-results" style="display: none;">
+                <p>没有找到匹配的项目</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Areas Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>研究领域</h2>
+                <p>专注于C/C++/Python/Shell编程语言的深度研究与技术优化</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>我专注于编程语言技术的深度研究，致力于探索C/C++/Python/Shell等语言的高级特性和性能优化策略。通过深入理解语言内部机制、内存管理和系统编程，我致力于解决高性能编程和跨语言协作的技术挑战。</p>
+                    <p>我的核心研究领域包括：</p>
+                    <ul class="research-areas">
+                        <li><i class="fas fa-bolt"></i> C语言内存管理与性能优化</li>
+                        <li><i class="fas fa-rocket"></i> C++现代特性与模板元编程</li>
+                        <li><i class="fas fa-snake"></i> Python高级编程与性能优化</li>
+                        <li><i class="fas fa-terminal"></i> Shell脚本编程与系统自动化</li>
+                        <li><i class="fas fa-link"></i> 跨语言编程接口与互操作</li>
+                        <li><i class="fas fa-chart-line"></i> 编程语言性能基准测试</li>
+                        <li><i class="fas fa-shield-alt"></i> 编程语言安全性与最佳实践</li>
+                        <li><i class="fas fa-tools"></i> 编程语言工具链与开发环境</li>
+                    </ul>
+                    <p>通过理论与实践相结合的研究方法，我致力于为编程语言技术领域贡献创新解决方案，推动相关技术的产业化应用和最佳实践的普及。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Research Portfolio. All rights reserved.</p>
+                <p>Built with ❤️ for knowledge sharing</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // 简化的项目加载和渲染逻辑
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('DOM加载完成，开始初始化...');
+            
+            try {
+                // 加载项目数据
+                const response = await fetch('projects/projects.json');
+                const projects = await response.json();
+                console.log('成功加载', projects.length, '个项目');
+                
+                // 渲染项目
+                const projectsGrid = document.getElementById('projects-grid');
+                if (projectsGrid) {
+                    projectsGrid.innerHTML = projects.map(project => `
+                        <div class="project-card">
+                            <div class="project-image">
+                                ${project.image}
+                            </div>
+                            <div class="project-content">
+                                <h3 class="project-title">${project.title}</h3>
+                                <p class="project-description">${project.description}</p>
+                                <div class="project-meta">
+                                    <span class="project-category">${project.category}</span>
+                                    <span class="project-year">${project.year}</span>
+                                </div>
+                                <div class="project-tags">
+                                    ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                                </div>
+                                <div class="project-actions">
+                                    <button class="btn btn-primary" onclick="showProjectDetails(${project.id})">
+                                        <span class="btn-icon">📋</span>
+                                        查看详情
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="viewProjectContent('${project.folder}')">
+                                        <span class="btn-icon">📖</span>
+                                        查看内容
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    console.log('渲染了', projects.length, '个项目卡片');
+                }
+                
+                // 更新统计信息
+                const totalProjects = document.getElementById('total-projects');
+                const categoryCount = document.getElementById('category-count');
+                const yearCount = document.getElementById('year-count');
+                
+                if (totalProjects) totalProjects.textContent = projects.length;
+                if (categoryCount) categoryCount.textContent = [...new Set(projects.map(p => p.category))].length;
+                if (yearCount) yearCount.textContent = [...new Set(projects.map(p => p.year))].length;
+                
+                // 存储项目数据到全局变量
+                window.projects = projects;
+                
+            } catch (error) {
+                console.error('初始化失败:', error);
+                const projectsGrid = document.getElementById('projects-grid');
+                if (projectsGrid) {
+                    projectsGrid.innerHTML = '<p style="color: red;">加载项目失败: ' + error.message + '</p>';
+                }
+            }
+        });
+        
+        // 全局函数
+        function showProjectDetails(projectId) {
+            const project = window.projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            const modal = document.getElementById('project-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            if (modal && modalContent) {
+                modalContent.innerHTML = `
+                    <div class="project-details">
+                        <h2>${project.title}</h2>
+                        <div class="project-meta-details">
+                            <span class="project-category">${project.category}</span>
+                            <span class="project-year">${project.year}</span>
+                        </div>
+                        <p class="project-description-full">${project.details}</p>
+                        <div class="project-tags-full">
+                            <strong>技术标签：</strong>
+                            ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="project-actions-modal">
+                            <button class="btn btn-primary" onclick="viewProjectContent('${project.folder}')">
+                                <span class="btn-icon">📖</span>
+                                查看项目内容
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeModal()">
+                                <span class="btn-icon">✕</span>
+                                关闭
+                            </button>
+                        </div>
+                    </div>
+                `;
+                modal.style.display = 'block';
+            }
+        }
+        
+        function viewProjectContent(folder) {
+            alert(`查看文件夹内容: ${folder}\n\n这个功能会显示 ${folder} 文件夹中的代码文件。`);
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('project-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

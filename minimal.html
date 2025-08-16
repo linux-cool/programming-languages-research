@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编程语言研究项目 - 最小化测试</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>编程语言研究项目</h1>
+            <p>C/C++/Python/Shell编程语言深度研究</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="projects">
+            <div class="container">
+                <h2>研究项目</h2>
+                <div id="projects-grid">
+                    <!-- 项目将在这里动态加载 -->
+                </div>
+                <div id="no-results" style="display: none;">
+                    <p>没有找到匹配的项目</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 简化的项目加载和渲染逻辑
+        class SimplePortfolio {
+            constructor() {
+                this.projects = [];
+                this.init();
+            }
+            
+            async init() {
+                await this.loadProjects();
+                this.renderProjects();
+            }
+            
+            async loadProjects() {
+                try {
+                    const response = await fetch('projects/projects.json');
+                    this.projects = await response.json();
+                    console.log('加载了', this.projects.length, '个项目');
+                } catch (error) {
+                    console.error('加载项目失败:', error);
+                }
+            }
+            
+            renderProjects() {
+                const projectsGrid = document.getElementById('projects-grid');
+                
+                if (this.projects.length === 0) {
+                    projectsGrid.innerHTML = '<p>正在加载项目...</p>';
+                    return;
+                }
+                
+                projectsGrid.innerHTML = this.projects.map(project => `
+                    <div class="project-card">
+                        <div class="project-image">
+                            ${project.image}
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">${project.title}</h3>
+                            <p class="project-description">${project.description}</p>
+                            <div class="project-meta">
+                                <span class="project-category">${project.category}</span>
+                                <span class="project-year">${project.year}</span>
+                            </div>
+                            <div class="project-tags">
+                                ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn-primary" onclick="showProjectDetails(${project.id})">
+                                    <span class="btn-icon">📋</span>
+                                    查看详情
+                                </button>
+                                <button class="btn btn-secondary" onclick="viewProjectContent('${project.folder}')">
+                                    <span class="btn-icon">📖</span>
+                                    查看内容
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                console.log('渲染了', this.projects.length, '个项目卡片');
+            }
+        }
+        
+        // 全局函数
+        function showProjectDetails(projectId) {
+            const project = window.portfolio.projects.find(p => p.id === projectId);
+            if (project) {
+                alert(`项目详情: ${project.title}\n\n${project.details}`);
+            }
+        }
+        
+        function viewProjectContent(folder) {
+            alert(`查看文件夹内容: ${folder}\n\n这个功能会显示 ${folder} 文件夹中的代码文件。`);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM加载完成，开始初始化...');
+            window.portfolio = new SimplePortfolio();
+        });
+    </script>
+</body>
+</html>

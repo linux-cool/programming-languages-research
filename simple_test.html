@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>简单测试页面</h1>
+    
+    <div class="test">
+        <h2>测试1: 基础JavaScript</h2>
+        <button onclick="test1()">测试基础JS</button>
+        <div id="result1"></div>
+    </div>
+    
+    <div class="test">
+        <h2>测试2: 加载项目数据</h2>
+        <button onclick="test2()">加载数据</button>
+        <div id="result2"></div>
+    </div>
+    
+    <div class="test">
+        <h2>测试3: 渲染项目</h2>
+        <button onclick="test3()">渲染项目</button>
+        <div id="projects-container"></div>
+    </div>
+
+    <script>
+        let projectsData = [];
+        
+        function test1() {
+            document.getElementById('result1').innerHTML = '<span class="success">✅ 基础JavaScript工作正常</span>';
+        }
+        
+        async function test2() {
+            try {
+                const response = await fetch('projects/projects.json');
+                projectsData = await response.json();
+                document.getElementById('result2').innerHTML = 
+                    `<span class="success">✅ 成功加载 ${projectsData.length} 个项目</span>
+                     <br>第一个项目: ${projectsData[0].title}`;
+            } catch (error) {
+                document.getElementById('result2').innerHTML = 
+                    `<span class="error">❌ 加载失败: ${error.message}</span>`;
+            }
+        }
+        
+        function test3() {
+            if (projectsData.length === 0) {
+                document.getElementById('result2').innerHTML = '<span class="error">❌ 请先加载数据</span>';
+                return;
+            }
+            
+            const container = document.getElementById('projects-container');
+            container.innerHTML = '<h3>项目列表:</h3>';
+            
+            projectsData.forEach(project => {
+                const card = document.createElement('div');
+                card.style.border = '1px solid #ddd';
+                card.style.padding = '15px';
+                card.style.margin = '10px 0';
+                card.style.borderRadius = '8px';
+                
+                card.innerHTML = `
+                    <h4>${project.title}</h4>
+                    <p><strong>领域:</strong> ${project.category}</p>
+                    <p>${project.description}</p>
+                    <button onclick="showDetails(${project.id})">查看详情</button>
+                    <button onclick="viewContent('${project.folder}')">查看内容</button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function showDetails(projectId) {
+            const project = projectsData.find(p => p.id === projectId);
+            if (project) {
+                alert(`项目详情: ${project.title}\n\n${project.details}`);
+            }
+        }
+        
+        function viewContent(folder) {
+            alert(`查看文件夹内容: ${folder}`);
+        }
+    </script>
+</body>
+</html>

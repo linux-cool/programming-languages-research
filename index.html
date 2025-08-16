@@ -3,80 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>研究项目展示 - Research Portfolio</title>
-    <meta name="description" content="个人研究项目展示网站，包含各种研究领域的项目介绍和成果展示">
-    <meta name="keywords" content="研究项目,学术展示,项目作品集,科研成果,个人网站">
-    <meta name="author" content="Research Portfolio">
+    <title>编程语言研究项目展示 - Programming Languages Research Portfolio</title>
+    <meta name="description" content="C/C++/Python/Shell编程语言深度研究项目展示网站">
+    <meta name="keywords" content="编程语言,研究项目,C语言,C++,Python,Shell,技术研究">
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourusername.github.io/research-portfolio/">
-    <meta property="og:title" content="研究项目展示 - Research Portfolio">
-    <meta property="og:description" content="个人研究项目展示网站，包含各种研究领域的项目介绍和成果展示">
-    <meta property="og:image" content="https://yourusername.github.io/research-portfolio/images/og-image.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://yourusername.github.io/research-portfolio/">
-    <meta property="twitter:title" content="研究项目展示 - Research Portfolio">
-    <meta property="twitter:description" content="个人研究项目展示网站，包含各种研究领域的项目介绍和成果展示">
-    <meta property="twitter:image" content="https://yourusername.github.io/research-portfolio/images/og-image.png">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
-    <link rel="manifest" href="images/site.webmanifest">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <nav class="nav">
-            <div class="nav-container">
-                <div class="nav-logo">
-                    <h1>Research Portfolio</h1>
-                </div>
-                <div class="nav-menu" id="nav-menu">
-                    <a href="#home" class="nav-link">首页</a>
-                    <a href="#projects" class="nav-link">项目</a>
-                    <a href="#about" class="nav-link">关于</a>
-                </div>
-                <div class="nav-toggle" id="nav-toggle">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
+        <div class="container">
+            <div class="header-content">
+                <h1 class="site-title">编程语言研究项目</h1>
+                <p class="site-subtitle">C/C++/Python/Shell编程语言深度研究</p>
             </div>
-        </nav>
+        </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title">欢迎来到我的研究世界</h1>
-                <p class="hero-subtitle">探索创新思维，分享研究成果，连接知识边界</p>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="project-count">0</span>
-                        <span class="stat-label">研究项目</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="category-count">0</span>
-                        <span class="stat-label">研究领域</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="year-count">0</span>
-                        <span class="stat-label">研究年限</span>
-                    </div>
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number" id="total-projects">0</span>
+                    <span class="stat-label">研究项目</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="category-count">0</span>
+                    <span class="stat-label">研究领域</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="year-count">0</span>
+                    <span class="stat-label">研究年限</span>
                 </div>
             </div>
         </div>
@@ -110,10 +79,10 @@
         <div class="container">
             <div class="section-header">
                 <h2>研究项目</h2>
-                <p>探索我在各个领域的研究成果和项目经验</p>
+                <p>探索我在各个编程语言领域的研究成果和项目经验</p>
             </div>
             <div class="projects-grid" id="projects-grid">
-                <!-- Projects will be dynamically loaded here -->
+                <!-- 项目将在这里动态加载 -->
             </div>
             <div class="no-results" id="no-results" style="display: none;">
                 <p>没有找到匹配的项目</p>
@@ -126,33 +95,33 @@
         <div class="container">
             <div class="section-header">
                 <h2>研究领域</h2>
-                <p>专注于音视频处理、流媒体技术和云原生架构的前沿研究</p>
+                <p>专注于C/C++/Python/Shell编程语言的深度研究与技术优化</p>
             </div>
             <div class="about-content">
                 <div class="about-text">
-                    <p>我专注于音视频处理技术的前沿研究，致力于推动FFmpeg生态系统的发展和应用。通过深入理解音视频编解码、流媒体传输和云原生架构，我致力于解决大规模音视频处理的技术挑战。</p>
+                    <p>我专注于编程语言技术的深度研究，致力于探索C/C++/Python/Shell等语言的高级特性和性能优化策略。通过深入理解语言内部机制、内存管理和系统编程，我致力于解决高性能编程和跨语言协作的技术挑战。</p>
                     <p>我的核心研究领域包括：</p>
                     <ul class="research-areas">
-                        <li><i class="fas fa-video"></i> 视频编解码算法优化</li>
-                        <li><i class="fas fa-music"></i> 音频处理与增强技术</li>
-                        <li><i class="fas fa-broadcast-tower"></i> 流媒体传输协议研究</li>
-                        <li><i class="fas fa-cloud"></i> 云原生音视频处理架构</li>
-                        <li><i class="fas fa-eye"></i> 实时视频分析与智能处理</li>
-                        <li><i class="fas fa-mobile-alt"></i> 跨平台移动端音视频开发</li>
+                        <li><i class="fas fa-bolt"></i> C语言内存管理与性能优化</li>
+                        <li><i class="fas fa-rocket"></i> C++现代特性与模板元编程</li>
+                        <li><i class="fas fa-snake"></i> Python高级编程与性能优化</li>
+                        <li><i class="fas fa-terminal"></i> Shell脚本编程与系统自动化</li>
+                        <li><i class="fas fa-link"></i> 跨语言编程接口与互操作</li>
+                        <li><i class="fas fa-chart-line"></i> 编程语言性能基准测试</li>
+                        <li><i class="fas fa-shield-alt"></i> 编程语言安全性与最佳实践</li>
+                        <li><i class="fas fa-tools"></i> 编程语言工具链与开发环境</li>
                     </ul>
-                    <p>通过理论与实践相结合的研究方法，我致力于为音视频技术领域贡献创新解决方案，推动相关技术的产业化应用。</p>
+                    <p>通过理论与实践相结合的研究方法，我致力于为编程语言技术领域贡献创新解决方案，推动相关技术的产业化应用和最佳实践的普及。</p>
                 </div>
             </div>
         </div>
     </section>
 
-
-
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2025 Research Portfolio. All rights reserved.</p>
+                <p>&copy; 2025 Programming Languages Research Portfolio. All rights reserved.</p>
                 <p>Built with ❤️ for knowledge sharing</p>
             </div>
         </div>
@@ -166,6 +135,336 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
+    <script>
+        // 编程语言研究项目展示系统
+        class ProgrammingLanguagesPortfolio {
+            constructor() {
+                this.projects = [];
+                this.filteredProjects = [];
+                this.currentFilters = {
+                    search: '',
+                    category: '',
+                    year: ''
+                };
+                this.init();
+            }
+            
+            async init() {
+                console.log('初始化编程语言研究项目展示系统...');
+                await this.loadProjects();
+                this.setupEventListeners();
+                this.renderProjects();
+                this.updateStats();
+                this.updateFilters();
+                console.log('系统初始化完成');
+            }
+            
+            async loadProjects() {
+                try {
+                    const response = await fetch('projects/projects.json');
+                    this.projects = await response.json();
+                    this.filteredProjects = [...this.projects];
+                    console.log(`成功加载 ${this.projects.length} 个项目`);
+                } catch (error) {
+                    console.error('加载项目失败:', error);
+                    // 使用备用数据
+                    this.projects = this.getFallbackProjects();
+                    this.filteredProjects = [...this.projects];
+                }
+            }
+            
+            getFallbackProjects() {
+                return [
+                    {
+                        id: 1,
+                        title: "C语言内存管理与性能优化深度研究",
+                        description: "深入研究C语言内存管理机制，包括动态内存分配、内存泄漏检测、性能优化等核心技术。",
+                        category: "C语言研究",
+                        year: 2024,
+                        tags: ["C语言", "内存管理", "性能优化"],
+                        image: "⚡",
+                        details: "C语言内存管理项目专注于系统级编程的核心技术。我们深入研究了C语言的内存模型和性能优化策略，实现了高效的内存池管理算法和内存泄漏检测工具。",
+                        folder: "C语言研究"
+                    },
+                    {
+                        id: 2,
+                        title: "C++现代特性与模板元编程研究",
+                        description: "探索C++11/14/17/20现代特性，深入研究模板元编程、智能指针、移动语义等高级技术。",
+                        category: "C++研究",
+                        year: 2024,
+                        tags: ["C++", "模板元编程", "智能指针"],
+                        image: "🚀",
+                        details: "C++现代特性研究项目深入探索了C++的高级编程技术。我们基于最新的C++标准，实现了多种现代编程模式。",
+                        folder: "C++研究"
+                    }
+                ];
+            }
+            
+            setupEventListeners() {
+                // 搜索功能
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        this.currentFilters.search = e.target.value;
+                        this.filterProjects();
+                    });
+                }
+                
+                // 分类筛选
+                const categoryFilter = document.getElementById('category-filter');
+                if (categoryFilter) {
+                    categoryFilter.addEventListener('change', (e) => {
+                        this.currentFilters.category = e.target.value;
+                        this.filterProjects();
+                    });
+                }
+                
+                // 年份筛选
+                const yearFilter = document.getElementById('year-filter');
+                if (yearFilter) {
+                    yearFilter.addEventListener('change', (e) => {
+                        this.currentFilters.year = e.target.value;
+                        this.filterProjects();
+                    });
+                }
+                
+                // 清除筛选
+                const clearFilters = document.getElementById('clear-filters');
+                if (clearFilters) {
+                    clearFilters.addEventListener('click', () => {
+                        this.clearFilters();
+                    });
+                }
+                
+                // 模态框关闭
+                const modal = document.getElementById('project-modal');
+                if (modal) {
+                    const closeBtn = modal.querySelector('.close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', () => {
+                            this.closeModal();
+                        });
+                    }
+                    
+                    // 点击模态框外部关闭
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            this.closeModal();
+                        }
+                    });
+                }
+            }
+            
+            filterProjects() {
+                this.filteredProjects = this.projects.filter(project => {
+                    const matchesSearch = !this.currentFilters.search || 
+                        project.title.toLowerCase().includes(this.currentFilters.search.toLowerCase()) ||
+                        project.description.toLowerCase().includes(this.currentFilters.search.toLowerCase()) ||
+                        project.tags.some(tag => tag.toLowerCase().includes(this.currentFilters.search.toLowerCase()));
+                    
+                    const matchesCategory = !this.currentFilters.category || 
+                        project.category === this.currentFilters.category;
+                    
+                    const matchesYear = !this.currentFilters.year || 
+                        project.year.toString() === this.currentFilters.year;
+                    
+                    return matchesSearch && matchesCategory && matchesYear;
+                });
+                
+                this.renderProjects();
+                this.updateStats();
+            }
+            
+            clearFilters() {
+                this.currentFilters = { search: '', category: '', year: '' };
+                
+                if (document.getElementById('search-input')) {
+                    document.getElementById('search-input').value = '';
+                }
+                if (document.getElementById('category-filter')) {
+                    document.getElementById('category-filter').value = '';
+                }
+                if (document.getElementById('year-filter')) {
+                    document.getElementById('year-filter').value = '';
+                }
+                
+                this.filteredProjects = [...this.projects];
+                this.renderProjects();
+                this.updateFilters();
+            }
+            
+            updateFilters() {
+                // 更新分类筛选选项
+                const categoryFilter = document.getElementById('category-filter');
+                if (categoryFilter) {
+                    const categories = [...new Set(this.projects.map(p => p.category))];
+                    categoryFilter.innerHTML = '<option value="">所有领域</option>';
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category;
+                        option.textContent = category;
+                        categoryFilter.appendChild(option);
+                    });
+                }
+                
+                // 更新年份筛选选项
+                const yearFilter = document.getElementById('year-filter');
+                if (yearFilter) {
+                    const years = [...new Set(this.projects.map(p => p.year))].sort((a, b) => b - a);
+                    yearFilter.innerHTML = '<option value="">所有年份</option>';
+                    years.forEach(year => {
+                        const option = document.createElement('option');
+                        option.value = year;
+                        option.textContent = year;
+                        yearFilter.appendChild(option);
+                    });
+                }
+            }
+            
+            renderProjects() {
+                const projectsGrid = document.getElementById('projects-grid');
+                const noResults = document.getElementById('no-results');
+                
+                if (!projectsGrid) return;
+                
+                if (this.filteredProjects.length === 0) {
+                    projectsGrid.innerHTML = '<p class="no-projects">没有找到匹配的项目</p>';
+                    if (noResults) noResults.style.display = 'block';
+                    return;
+                }
+                
+                if (noResults) noResults.style.display = 'none';
+                
+                projectsGrid.innerHTML = this.filteredProjects.map(project => `
+                    <div class="project-card">
+                        <div class="project-image">
+                            ${project.image}
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">${project.title}</h3>
+                            <p class="project-description">${project.description}</p>
+                            <div class="project-meta">
+                                <span class="project-category">${project.category}</span>
+                                <span class="project-year">${project.year}</span>
+                            </div>
+                            <div class="project-tags">
+                                ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn-primary" onclick="portfolio.showProjectDetails(${project.id})">
+                                    <span class="btn-icon">📋</span>
+                                    查看详情
+                                </button>
+                                <button class="btn btn-secondary" onclick="portfolio.viewProjectContent('${project.folder}')">
+                                    <span class="btn-icon">📖</span>
+                                    查看内容
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                console.log(`渲染了 ${this.filteredProjects.length} 个项目卡片`);
+            }
+            
+            updateStats() {
+                const totalProjects = document.getElementById('total-projects');
+                const categoryCount = document.getElementById('category-count');
+                const yearCount = document.getElementById('year-count');
+                
+                if (totalProjects) totalProjects.textContent = this.projects.length;
+                if (categoryCount) categoryCount.textContent = [...new Set(this.projects.map(p => p.category))].length;
+                if (yearCount) yearCount.textContent = [...new Set(this.projects.map(p => p.year))].length;
+            }
+            
+            showProjectDetails(projectId) {
+                const project = this.projects.find(p => p.id === projectId);
+                if (!project) return;
+                
+                const modal = document.getElementById('project-modal');
+                const modalContent = document.getElementById('modal-content');
+                
+                if (modal && modalContent) {
+                    modalContent.innerHTML = `
+                        <div class="project-details">
+                            <h2>${project.title}</h2>
+                            <div class="project-meta-details">
+                                <span class="project-category">${project.category}</span>
+                                <span class="project-year">${project.year}</span>
+                            </div>
+                            <p class="project-description-full">${project.details}</p>
+                            <div class="project-tags-full">
+                                <strong>技术标签：</strong>
+                                ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="project-actions-modal">
+                                <button class="btn btn-primary" onclick="portfolio.viewProjectContent('${project.folder}')">
+                                    <span class="btn-icon">📖</span>
+                                    查看项目内容
+                                </button>
+                                <button class="btn btn-secondary" onclick="portfolio.closeModal()">
+                                    <span class="btn-icon">✕</span>
+                                    关闭
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    modal.style.display = 'block';
+                }
+            }
+            
+            viewProjectContent(folderName) {
+                alert(`查看文件夹内容: ${folderName}\n\n这个功能会显示 ${folderName} 文件夹中的代码文件。\n\n当前文件夹包含:\n- 示例代码文件\n- 技术文档\n- 研究成果`);
+            }
+            
+            closeModal() {
+                const modal = document.getElementById('project-modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+        
+        // 全局变量
+        let portfolio;
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM加载完成，开始初始化...');
+            portfolio = new ProgrammingLanguagesPortfolio();
+            window.portfolio = portfolio;
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 页面加载动画
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+        
+        // 头部滚动效果
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (header) {
+                if (window.scrollY > 100) {
+                    header.style.background = 'rgba(255, 255, 255, 0.98)';
+                } else {
+                    header.style.background = 'rgba(255, 255, 255, 0.95)';
+                }
+            }
+        });
+    </script>
 </body>
 </html>

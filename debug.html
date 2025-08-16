@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .error { color: red; }
+        .success { color: green; }
+        .warning { color: orange; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript调试页面</h1>
+    
+    <div class="debug-section">
+        <h2>1. 基础JavaScript测试</h2>
+        <button onclick="testBasicJS()">测试基础JavaScript</button>
+        <div id="basic-test"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>2. 项目数据加载测试</h2>
+        <button onclick="testDataLoading()">测试数据加载</button>
+        <div id="data-test"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>3. 主JavaScript文件测试</h2>
+        <button onclick="testMainJS()">测试主JS文件</button>
+        <div id="mainjs-test"></div>
+    </div>
+
+    <script>
+        function testBasicJS() {
+            const output = document.getElementById('basic-test');
+            try {
+                output.innerHTML = '<p class="success">✅ 基础JavaScript正常工作</p>';
+                console.log('基础JavaScript测试通过');
+            } catch (error) {
+                output.innerHTML = `<p class="error">❌ 基础JavaScript错误: ${error.message}</p>`;
+                console.error('基础JavaScript测试失败:', error);
+            }
+        }
+        
+        async function testDataLoading() {
+            const output = document.getElementById('data-test');
+            try {
+                const response = await fetch('projects/projects.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const data = await response.json();
+                output.innerHTML = `<p class="success">✅ 数据加载成功: ${data.length} 个项目</p>
+                                   <p>第一个项目: ${data[0].title}</p>`;
+                console.log('数据加载测试通过:', data.length, '个项目');
+            } catch (error) {
+                output.innerHTML = `<p class="error">❌ 数据加载失败: ${error.message}</p>`;
+                console.error('数据加载测试失败:', error);
+            }
+        }
+        
+        function testMainJS() {
+            const output = document.getElementById('mainjs-test');
+            try {
+                // 检查主JS文件是否加载
+                if (typeof ResearchPortfolio === 'undefined') {
+                    throw new Error('ResearchPortfolio类未定义');
+                }
+                
+                // 尝试创建实例
+                const portfolio = new ResearchPortfolio();
+                output.innerHTML = '<p class="success">✅ 主JavaScript文件正常工作</p>';
+                console.log('主JavaScript测试通过');
+            } catch (error) {
+                output.innerHTML = `<p class="error">❌ 主JavaScript错误: ${error.message}</p>`;
+                console.error('主JavaScript测试失败:', error);
+            }
+        }
+        
+        // 页面加载完成后的自动测试
+        window.addEventListener('load', () => {
+            console.log('页面加载完成');
+            document.getElementById('basic-test').innerHTML = '<p class="warning">⚠️ 请点击测试按钮</p>';
+        });
+        
+        // 错误捕获
+        window.addEventListener('error', (event) => {
+            console.error('全局错误:', event.error);
+        });
+        
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('未处理的Promise拒绝:', event.reason);
+        });
+    </script>
+    
+    <!-- 加载主JavaScript文件 -->
+    <script src="js/main.js"></script>
+</body>
+</html>
