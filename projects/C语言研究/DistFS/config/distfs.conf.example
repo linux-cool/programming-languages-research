@@ -1,0 +1,217 @@
+# DistFS 分布式文件系统配置文件示例
+# 
+# 这是DistFS的主配置文件，包含了系统运行所需的各种参数设置
+# 请根据实际环境修改相应的配置项
+
+# ================================
+# 网络配置
+# ================================
+
+# 监听端口 (默认: 9527)
+listen_port = 9527
+
+# 最大并发连接数 (默认: 1000)
+max_connections = 1000
+
+# 连接超时时间，单位：秒 (默认: 60)
+timeout = 60
+
+# 心跳间隔，单位：秒 (默认: 30)
+heartbeat_interval = 30
+
+# ================================
+# 存储配置
+# ================================
+
+# 数据存储目录 (默认: /tmp/distfs)
+data_dir = /var/lib/distfs/data
+
+# 数据块大小，单位：字节 (默认: 67108864 = 64MB)
+block_size = 67108864
+
+# 副本数量 (默认: 3)
+replica_count = 3
+
+# ================================
+# 性能配置
+# ================================
+
+# 线程池大小 (默认: 8)
+thread_pool_size = 8
+
+# 启用数据压缩 (默认: false)
+enable_compression = true
+
+# 启用数据加密 (默认: false)
+enable_encryption = false
+
+# ================================
+# 日志配置
+# ================================
+
+# 日志文件路径 (默认: /tmp/distfs.log)
+log_file = /var/log/distfs/distfs.log
+
+# 日志级别 (0=TRACE, 1=DEBUG, 2=INFO, 3=WARN, 4=ERROR, 5=FATAL)
+# 默认: 2 (INFO)
+log_level = 2
+
+# ================================
+# 集群配置
+# ================================
+
+# 元数据服务器地址列表
+# 格式: ip:port
+metadata_servers = 127.0.0.1:9527,127.0.0.1:9528,127.0.0.1:9529
+
+# 存储节点地址列表
+# 格式: ip:port
+storage_nodes = 127.0.0.1:9530,127.0.0.1:9531,127.0.0.1:9532
+
+# 集群名称
+cluster_name = distfs-cluster
+
+# 节点ID (自动生成或手动指定)
+# node_id = auto
+
+# ================================
+# 安全配置
+# ================================
+
+# 启用访问控制 (默认: false)
+enable_access_control = false
+
+# 用户认证方式 (none, simple, kerberos)
+auth_method = none
+
+# SSL/TLS配置
+enable_ssl = false
+ssl_cert_file = /etc/distfs/ssl/server.crt
+ssl_key_file = /etc/distfs/ssl/server.key
+ssl_ca_file = /etc/distfs/ssl/ca.crt
+
+# ================================
+# 监控配置
+# ================================
+
+# 启用性能监控 (默认: true)
+enable_monitoring = true
+
+# 监控数据收集间隔，单位：秒 (默认: 60)
+monitoring_interval = 60
+
+# 监控数据保留时间，单位：天 (默认: 7)
+monitoring_retention_days = 7
+
+# Prometheus监控端口 (默认: 9090)
+prometheus_port = 9090
+
+# ================================
+# 故障恢复配置
+# ================================
+
+# 启用自动故障恢复 (默认: true)
+enable_auto_recovery = true
+
+# 故障检测间隔，单位：秒 (默认: 10)
+failure_detection_interval = 10
+
+# 故障恢复超时，单位：秒 (默认: 300)
+recovery_timeout = 300
+
+# 最大重试次数 (默认: 3)
+max_retry_count = 3
+
+# ================================
+# 缓存配置
+# ================================
+
+# 启用客户端缓存 (默认: true)
+enable_client_cache = true
+
+# 客户端缓存大小，单位：MB (默认: 256)
+client_cache_size = 256
+
+# 缓存过期时间，单位：秒 (默认: 300)
+cache_expire_time = 300
+
+# 启用元数据缓存 (默认: true)
+enable_metadata_cache = true
+
+# 元数据缓存大小，单位：MB (默认: 128)
+metadata_cache_size = 128
+
+# ================================
+# 调试配置
+# ================================
+
+# 启用调试模式 (默认: false)
+debug_mode = false
+
+# 启用详细日志 (默认: false)
+verbose_logging = false
+
+# 启用性能分析 (默认: false)
+enable_profiling = false
+
+# 性能分析输出文件
+profiling_output = /tmp/distfs_profile.out
+
+# ================================
+# 高级配置
+# ================================
+
+# I/O缓冲区大小，单位：KB (默认: 64)
+io_buffer_size = 64
+
+# 网络发送缓冲区大小，单位：KB (默认: 256)
+send_buffer_size = 256
+
+# 网络接收缓冲区大小，单位：KB (默认: 256)
+recv_buffer_size = 256
+
+# 启用TCP_NODELAY (默认: true)
+tcp_nodelay = true
+
+# 启用SO_REUSEADDR (默认: true)
+so_reuseaddr = true
+
+# 最大文件大小，单位：GB (默认: 1024)
+max_file_size = 1024
+
+# 最大目录深度 (默认: 256)
+max_directory_depth = 256
+
+# 文件名最大长度 (默认: 255)
+max_filename_length = 255
+
+# ================================
+# 实验性功能
+# ================================
+
+# 启用数据去重 (实验性功能，默认: false)
+enable_deduplication = false
+
+# 启用数据分层存储 (实验性功能，默认: false)
+enable_tiered_storage = false
+
+# 启用快照功能 (实验性功能，默认: false)
+enable_snapshots = false
+
+# 启用版本控制 (实验性功能，默认: false)
+enable_versioning = false
+
+# ================================
+# 配置文件说明
+# ================================
+#
+# 1. 配置项格式: key = value
+# 2. 以 # 开头的行为注释
+# 3. 空行会被忽略
+# 4. 字符串值不需要引号
+# 5. 布尔值使用 true/false
+# 6. 数值可以使用单位后缀 (K, M, G)
+# 7. 修改配置后需要重启服务生效
+#
+# 更多配置说明请参考官方文档:
+# https://github.com/distfs/distfs/wiki/Configuration
