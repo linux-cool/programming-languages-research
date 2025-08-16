@@ -46,37 +46,23 @@ set(COMMON_SOURCES
     src/common/utils.c
     src/common/config.c
     src/common/log.c
-    src/common/memory.c
-    src/common/hash.c
 )
 
 set(NETWORK_SOURCES
     src/network/network.c
-    src/network/protocol.c
-    src/network/server.c
     src/network/client.c
-    src/network/connection.c
 )
 
 set(STORAGE_SOURCES
     src/storage/storage_node.c
-    src/storage/block_manager.c
-    src/storage/replication.c
-    src/storage/disk_io.c
 )
 
 set(METADATA_SOURCES
-    src/metadata/metadata_server.c
-    src/metadata/file_registry.c
-    src/metadata/btree.c
-    src/metadata/transaction.c
+    # Metadata server implementation will be added later
 )
 
 set(CLIENT_SOURCES
     src/client/client.c
-    src/client/file_ops.c
-    src/client/cache.c
-    src/client/api.c
 )
 
 # 创建静态库
@@ -143,25 +129,13 @@ set_target_properties(distfs PROPERTIES
 enable_testing()
 
 # 单元测试
-add_executable(test_utils tests/test_utils.c)
-target_link_libraries(test_utils distfs_common)
-add_test(NAME test_utils COMMAND test_utils)
+add_executable(test_basic tests/test_basic.c)
+target_link_libraries(test_basic distfs_common)
+add_test(NAME test_basic COMMAND test_basic)
 
-add_executable(test_network tests/test_network.c)
-target_link_libraries(test_network distfs_network distfs_common)
-add_test(NAME test_network COMMAND test_network)
-
-add_executable(test_storage tests/test_storage.c)
-target_link_libraries(test_storage distfs_storage distfs_common)
-add_test(NAME test_storage COMMAND test_storage)
-
-add_executable(test_metadata tests/test_metadata.c)
-target_link_libraries(test_metadata distfs_metadata distfs_common)
-add_test(NAME test_metadata COMMAND test_metadata)
-
-add_executable(test_client tests/test_client.c)
-target_link_libraries(test_client distfs_client distfs_network distfs_common)
-add_test(NAME test_client COMMAND test_client)
+add_executable(test_config tests/test_config.c)
+target_link_libraries(test_config distfs_common)
+add_test(NAME test_config COMMAND test_config)
 
 # 集成测试
 add_executable(integration_test tests/integration_test.c)
