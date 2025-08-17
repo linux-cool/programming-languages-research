@@ -3,6 +3,7 @@
  * 提供结构化日志记录功能
  */
 
+#define _GNU_SOURCE
 #include "distfs.h"
 #include <stdio.h>
 #include <stdlib.h>

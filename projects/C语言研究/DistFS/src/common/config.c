@@ -3,16 +3,17 @@
  * 提供配置文件解析和管理功能
  */
 
+#define _GNU_SOURCE
 #include "distfs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
 #include <stdbool.h>
-#define _GNU_SOURCE
-#include <string.h>
+#include <pthread.h>
 
 /* 配置项结构 */
 typedef struct config_item {

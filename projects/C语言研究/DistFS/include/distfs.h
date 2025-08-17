@@ -412,8 +412,13 @@ int distfs_disk_io_get_stats(distfs_disk_io_manager_t *manager,
 
 /* ========== 网络服务器API ========== */
 typedef struct distfs_network_server distfs_network_server_t;
-typedef int (*distfs_message_handler_t)(distfs_connection_t *conn,
-                                        distfs_message_t *message,
+
+/* 前向声明 - 类型在network.h中定义 */
+struct distfs_connection;
+struct distfs_message;
+
+typedef int (*distfs_message_handler_t)(struct distfs_connection *conn,
+                                        struct distfs_message *message,
                                         void *user_data);
 
 distfs_network_server_t* distfs_network_server_create(uint16_t port, int max_connections,
@@ -438,10 +443,10 @@ typedef struct {
 } distfs_connection_pool_stats_t;
 
 distfs_connection_pool_t* distfs_connection_pool_create(int max_connections);
-distfs_connection_t* distfs_connection_pool_get(distfs_connection_pool_t *pool,
-                                               const char *hostname, uint16_t port);
+struct distfs_connection* distfs_connection_pool_get(distfs_connection_pool_t *pool,
+                                                    const char *hostname, uint16_t port);
 int distfs_connection_pool_return(distfs_connection_pool_t *pool,
-                                 distfs_connection_t *conn);
+                                 struct distfs_connection *conn);
 void distfs_connection_pool_destroy(distfs_connection_pool_t *pool);
 int distfs_connection_pool_get_stats(distfs_connection_pool_t *pool,
                                     distfs_connection_pool_stats_t *stats);

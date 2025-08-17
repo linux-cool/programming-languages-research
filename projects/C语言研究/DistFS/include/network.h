@@ -6,7 +6,7 @@
 #ifndef DISTFS_NETWORK_H
 #define DISTFS_NETWORK_H
 
-#include "distfs.h"
+#include <stdint.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -16,6 +16,7 @@ extern "C" {
 #endif
 
 /* 网络协议常量 */
+#define DISTFS_PROTOCOL_MAGIC       0x44495354  // "DIST"
 #define DISTFS_PROTOCOL_VERSION     1
 #define DISTFS_MAX_MESSAGE_SIZE     (16 * 1024 * 1024)  // 16MB
 #define DISTFS_HEADER_SIZE          16
