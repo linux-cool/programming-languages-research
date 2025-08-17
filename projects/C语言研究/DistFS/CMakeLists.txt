@@ -52,6 +52,9 @@ set(COMMON_SOURCES
 
 set(NETWORK_SOURCES
     src/network/network.c
+    src/network/server.c
+    src/network/client.c
+    src/network/connection_pool.c
 )
 
 set(STORAGE_SOURCES
@@ -67,6 +70,8 @@ set(METADATA_SOURCES
 
 set(CLIENT_SOURCES
     src/client/client.c
+    src/client/file_ops.c
+    src/client/cache.c
 )
 
 # 创建静态库
@@ -137,6 +142,12 @@ enable_testing()
 add_executable(test_basic tests/test_basic.c)
 target_link_libraries(test_basic distfs_common distfs_network)
 add_test(NAME test_basic COMMAND test_basic)
+
+# 集成测试
+add_executable(test_integration tests/test_integration.c)
+target_link_libraries(test_integration
+    distfs_client distfs_storage distfs_metadata distfs_network distfs_common)
+add_test(NAME test_integration COMMAND test_integration)
 
 # 安装配置
 install(TARGETS distfs distfs_metadata_server distfs_storage_node distfs_client_tool

@@ -410,6 +410,81 @@ int distfs_disk_io_write_async(distfs_disk_io_manager_t *manager, int fd,
 int distfs_disk_io_get_stats(distfs_disk_io_manager_t *manager,
                             distfs_disk_io_stats_t *stats);
 
+/* ========== 网络服务器API ========== */
+typedef struct distfs_network_server distfs_network_server_t;
+typedef int (*distfs_message_handler_t)(distfs_connection_t *conn,
+                                        distfs_message_t *message,
+                                        void *user_data);
+
+distfs_network_server_t* distfs_network_server_create(uint16_t port, int max_connections,
+                                                     distfs_message_handler_t handler,
+                                                     void *user_data);
+int distfs_network_server_start(distfs_network_server_t *server);
+int distfs_network_server_stop(distfs_network_server_t *server);
+void distfs_network_server_destroy(distfs_network_server_t *server);
+
+/* ========== 连接池API ========== */
+typedef struct distfs_connection_pool distfs_connection_pool_t;
+
+typedef struct {
+    int max_connections;
+    int current_connections;
+    uint64_t total_created;
+    uint64_t total_destroyed;
+    uint64_t total_requests;
+    uint64_t cache_hits;
+    uint64_t cache_misses;
+    double hit_rate;
+} distfs_connection_pool_stats_t;
+
+distfs_connection_pool_t* distfs_connection_pool_create(int max_connections);
+distfs_connection_t* distfs_connection_pool_get(distfs_connection_pool_t *pool,
+                                               const char *hostname, uint16_t port);
+int distfs_connection_pool_return(distfs_connection_pool_t *pool,
+                                 distfs_connection_t *conn);
+void distfs_connection_pool_destroy(distfs_connection_pool_t *pool);
+int distfs_connection_pool_get_stats(distfs_connection_pool_t *pool,
+                                    distfs_connection_pool_stats_t *stats);
+
+/* ========== 客户端API ========== */
+typedef struct distfs_client_context distfs_client_context_t;
+typedef struct distfs_file_handle distfs_file_handle_t;
+typedef struct distfs_dir_handle distfs_dir_handle_t;
+
+distfs_client_context_t* distfs_client_create(const char *metadata_server, uint16_t metadata_port);
+void distfs_client_destroy(distfs_client_context_t *ctx);
+
+int distfs_create_file(distfs_client_context_t *ctx, const char *path, mode_t mode);
+distfs_file_handle_t* distfs_open_file(distfs_client_context_t *ctx, const char *path, int flags);
+ssize_t distfs_read_file(distfs_file_handle_t *handle, void *buffer, size_t size);
+ssize_t distfs_write_file(distfs_file_handle_t *handle, const void *buffer, size_t size);
+off_t distfs_seek_file(distfs_file_handle_t *handle, off_t offset, int whence);
+int distfs_close_file(distfs_file_handle_t *handle);
+int distfs_delete_file(distfs_client_context_t *ctx, const char *path);
+
+/* ========== 缓存API ========== */
+typedef struct distfs_cache distfs_cache_t;
+
+typedef struct {
+    size_t max_size;
+    size_t current_size;
+    int max_entries;
+    int current_entries;
+    uint64_t hits;
+    uint64_t misses;
+    uint64_t evictions;
+    uint64_t insertions;
+    double hit_rate;
+} distfs_cache_stats_t;
+
+distfs_cache_t* distfs_cache_create(size_t max_size, int max_entries, int ttl);
+int distfs_cache_put(distfs_cache_t *cache, const char *key, const void *data, size_t size);
+int distfs_cache_get(distfs_cache_t *cache, const char *key, void **data, size_t *size);
+int distfs_cache_remove(distfs_cache_t *cache, const char *key);
+void distfs_cache_clear(distfs_cache_t *cache);
+int distfs_cache_get_stats(distfs_cache_t *cache, distfs_cache_stats_t *stats);
+void distfs_cache_destroy(distfs_cache_t *cache);
+
 /* ========== 工具函数API ========== */
 const char* distfs_strerror(int error_code);
 uint64_t distfs_get_timestamp(void);
