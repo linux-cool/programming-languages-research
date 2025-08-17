@@ -337,63 +337,9 @@ uint64_t distfs_ntohll(uint64_t netlonglong) {
            ntohl(netlonglong >> 32);
 }
 
-/* 消息相关工具函数 */
-uint32_t distfs_calculate_message_checksum(const distfs_message_t *msg) {
-    if (!msg) {
-        return 0;
-    }
+/* 消息相关工具函数已在network.c中实现 */
 
-    uint32_t checksum = 0;
-
-    // 计算消息头校验和(除了checksum字段)
-    const uint8_t *header_bytes = (const uint8_t *)&msg->header;
-    size_t header_size = sizeof(msg->header) - sizeof(msg->header.checksum);
-
-    for (size_t i = 0; i < header_size; i++) {
-        checksum = (checksum << 1) ^ header_bytes[i];
-    }
-
-    // 计算payload校验和
-    if (msg->payload && msg->header.length > 0) {
-        const uint8_t *payload_bytes = (const uint8_t *)msg->payload;
-        for (uint32_t i = 0; i < msg->header.length; i++) {
-            checksum = (checksum << 1) ^ payload_bytes[i];
-        }
-    }
-
-    return checksum;
-}
-
-int distfs_validate_message(const distfs_message_t *msg) {
-    if (!msg) {
-        return DISTFS_ERROR_INVALID_PARAM;
-    }
-
-    // 检查魔数
-    if (msg->header.magic != 0x44495354) { // "DIST"
-        return DISTFS_ERROR_INVALID_PARAM;
-    }
-
-    // 检查版本
-    if (msg->header.version != DISTFS_PROTOCOL_VERSION) {
-        return DISTFS_ERROR_INVALID_PARAM;
-    }
-
-    // 检查长度
-    if (msg->header.length > 0 && !msg->payload) {
-        return DISTFS_ERROR_INVALID_PARAM;
-    }
-
-    // 验证校验和
-    uint32_t calculated_checksum = distfs_calculate_message_checksum(msg);
-    if (calculated_checksum != msg->header.checksum) {
-        return DISTFS_ERROR_INVALID_PARAM;
-    }
-
-    return DISTFS_SUCCESS;
-}
-
-const char* distfs_msg_type_to_string(uint16_t type) {
+const char* distfs_msg_type_to_string(distfs_msg_type_t type) {
     switch (type) {
         case DISTFS_MSG_CREATE_FILE:
             return "CREATE_FILE";
@@ -405,22 +351,24 @@ const char* distfs_msg_type_to_string(uint16_t type) {
             return "WRITE_FILE";
         case DISTFS_MSG_DELETE_FILE:
             return "DELETE_FILE";
-        case DISTFS_MSG_STAT_FILE:
-            return "STAT_FILE";
         case DISTFS_MSG_CREATE_DIR:
             return "CREATE_DIR";
         case DISTFS_MSG_DELETE_DIR:
             return "DELETE_DIR";
         case DISTFS_MSG_LIST_DIR:
             return "LIST_DIR";
-        case DISTFS_MSG_NODE_JOIN:
-            return "NODE_JOIN";
-        case DISTFS_MSG_NODE_LEAVE:
-            return "NODE_LEAVE";
+        case DISTFS_MSG_NODE_STATUS:
+            return "NODE_STATUS";
         case DISTFS_MSG_HEARTBEAT:
             return "HEARTBEAT";
-        case DISTFS_MSG_REPLICATE:
-            return "REPLICATE";
+        case DISTFS_MSG_REPLICATE_DATA:
+            return "REPLICATE_DATA";
+        case DISTFS_MSG_READ_BLOCK:
+            return "READ_BLOCK";
+        case DISTFS_MSG_WRITE_BLOCK:
+            return "WRITE_BLOCK";
+        case DISTFS_MSG_DELETE_BLOCK:
+            return "DELETE_BLOCK";
         case DISTFS_MSG_SUCCESS:
             return "SUCCESS";
         case DISTFS_MSG_ERROR:

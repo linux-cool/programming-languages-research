@@ -328,14 +328,93 @@ int distfs_metadata_server_start(distfs_metadata_server_t *server);
 int distfs_metadata_server_stop(distfs_metadata_server_t *server);
 void distfs_metadata_server_destroy(distfs_metadata_server_t *server);
 
+/* ========== 存储节点API ========== */
+typedef struct distfs_storage_node distfs_storage_node_t;
+
+distfs_storage_node_t* distfs_storage_node_create(const char *node_id,
+                                                  const char *data_dir,
+                                                  uint16_t port);
+int distfs_storage_node_start(distfs_storage_node_t *node);
+int distfs_storage_node_stop(distfs_storage_node_t *node);
+void distfs_storage_node_destroy(distfs_storage_node_t *node);
+
+/* ========== 块管理器API ========== */
+typedef struct distfs_block_manager distfs_block_manager_t;
+
+typedef struct {
+    uint64_t total_blocks;
+    uint64_t free_blocks;
+    uint64_t used_blocks;
+    uint64_t block_size;
+    uint64_t allocations;
+    uint64_t deallocations;
+    uint64_t reads;
+    uint64_t writes;
+} distfs_block_stats_t;
+
+distfs_block_manager_t* distfs_block_manager_create(const char *data_dir,
+                                                   uint64_t block_size,
+                                                   uint64_t total_blocks);
+void distfs_block_manager_destroy(distfs_block_manager_t *manager);
+int distfs_block_manager_sync(distfs_block_manager_t *manager);
+int distfs_block_manager_get_stats(distfs_block_manager_t *manager,
+                                  distfs_block_stats_t *stats);
+
+uint64_t distfs_block_allocate(distfs_block_manager_t *manager);
+int distfs_block_free(distfs_block_manager_t *manager, uint64_t block_id);
+bool distfs_block_is_allocated(distfs_block_manager_t *manager, uint64_t block_id);
+uint64_t distfs_block_get_free_count(distfs_block_manager_t *manager);
+int distfs_block_allocate_batch(distfs_block_manager_t *manager,
+                               uint64_t count, uint64_t *block_ids);
+
+/* ========== 复制管理器API ========== */
+typedef struct distfs_replication_manager distfs_replication_manager_t;
+
+distfs_replication_manager_t* distfs_replication_manager_create(int replica_count,
+                                                               int worker_count);
+int distfs_replication_manager_start(distfs_replication_manager_t *manager);
+int distfs_replication_manager_stop(distfs_replication_manager_t *manager);
+void distfs_replication_manager_destroy(distfs_replication_manager_t *manager);
+
+/* ========== 磁盘I/O管理器API ========== */
+typedef struct distfs_disk_io_manager distfs_disk_io_manager_t;
+typedef struct io_request io_request_t;
+
+typedef struct {
+    uint64_t total_reads;
+    uint64_t total_writes;
+    uint64_t total_syncs;
+    uint64_t bytes_read;
+    uint64_t bytes_written;
+    uint64_t pending_requests;
+    uint64_t completed_requests;
+    uint64_t failed_requests;
+    uint64_t avg_read_latency;
+    uint64_t avg_write_latency;
+} distfs_disk_io_stats_t;
+
+distfs_disk_io_manager_t* distfs_disk_io_manager_create(int worker_count,
+                                                       int max_concurrent_requests);
+int distfs_disk_io_manager_start(distfs_disk_io_manager_t *manager);
+int distfs_disk_io_manager_stop(distfs_disk_io_manager_t *manager);
+void distfs_disk_io_manager_destroy(distfs_disk_io_manager_t *manager);
+
+int distfs_disk_io_read_async(distfs_disk_io_manager_t *manager, int fd,
+                             void *buffer, size_t size, off_t offset,
+                             void (*callback)(io_request_t*, int, void*),
+                             void *user_data);
+int distfs_disk_io_write_async(distfs_disk_io_manager_t *manager, int fd,
+                              const void *buffer, size_t size, off_t offset,
+                              void (*callback)(io_request_t*, int, void*),
+                              void *user_data);
+int distfs_disk_io_get_stats(distfs_disk_io_manager_t *manager,
+                            distfs_disk_io_stats_t *stats);
+
 /* ========== 工具函数API ========== */
 const char* distfs_strerror(int error_code);
 uint64_t distfs_get_timestamp(void);
 uint64_t distfs_get_timestamp_sec(void);
 uint32_t distfs_calculate_checksum(const void *data, size_t size);
-uint32_t distfs_calculate_message_checksum(const struct distfs_message *msg);
-int distfs_validate_message(const struct distfs_message *msg);
-const char* distfs_msg_type_to_string(uint16_t type);
 
 #ifdef __cplusplus
 }
