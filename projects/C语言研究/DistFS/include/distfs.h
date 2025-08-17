@@ -8,6 +8,8 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
+#include <limits.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <pthread.h>
@@ -42,6 +44,11 @@ typedef enum {
     DISTFS_ERROR_CONSISTENCY_VIOLATION = -8,
     DISTFS_ERROR_STORAGE_FULL = -9,
     DISTFS_ERROR_TIMEOUT = -10,
+    DISTFS_ERROR_ALREADY_INITIALIZED = -11,
+    DISTFS_ERROR_SYSTEM_ERROR = -12,
+    DISTFS_ERROR_FILE_OPEN_FAILED = -13,
+    DISTFS_ERROR_NOT_FOUND = -14,
+    DISTFS_ERROR_UNSUPPORTED_OPERATION = -15,
     DISTFS_ERROR_UNKNOWN = -99
 } distfs_error_t;
 
@@ -218,6 +225,117 @@ int distfs_get_node_info(distfs_client_t *client, const char *node_addr,
 const char* distfs_strerror(distfs_error_t error);
 uint64_t distfs_get_timestamp(void);
 uint32_t distfs_calculate_checksum(const void *data, size_t size);
+
+/* ========== 配置管理API ========== */
+typedef struct distfs_config_manager distfs_config_manager_t;
+
+int distfs_config_init(const char *config_file);
+void distfs_config_cleanup(void);
+int distfs_config_load(const char *config_file);
+const char* distfs_config_get_string(const char *key, const char *default_value);
+int distfs_config_get_int(const char *key, int default_value);
+bool distfs_config_get_bool(const char *key, bool default_value);
+int distfs_config_set(const char *key, const char *value);
+bool distfs_config_is_modified(void);
+int distfs_config_reload(void);
+
+/* ========== 日志系统API ========== */
+typedef struct distfs_logger distfs_logger_t;
+
+/* 日志级别定义 */
+typedef enum {
+    DISTFS_LOG_TRACE = 0,
+    DISTFS_LOG_DEBUG = 1,
+    DISTFS_LOG_INFO = 2,
+    DISTFS_LOG_WARN = 3,
+    DISTFS_LOG_ERROR = 4,
+    DISTFS_LOG_FATAL = 5
+} distfs_log_level_t;
+
+int distfs_log_init(const char *log_file, int level);
+void distfs_log_cleanup(void);
+void distfs_log_set_level(int level);
+int distfs_log_get_level(void);
+void distfs_log_set_options(bool use_color, bool use_timestamp);
+void distfs_log_set_rotation(uint64_t max_file_size, int max_backup_files);
+void distfs_log_write(int level, const char *file, int line, const char *func,
+                      const char *format, ...);
+void distfs_log_hex(int level, const char *file, int line, const char *func,
+                    const char *prefix, const void *data, size_t size);
+bool distfs_log_is_enabled(int level);
+
+/* 日志宏定义 */
+#define DISTFS_LOG_TRACE(...) \
+    distfs_log_write(DISTFS_LOG_TRACE, __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define DISTFS_LOG_DEBUG(...) \
+    distfs_log_write(DISTFS_LOG_DEBUG, __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define DISTFS_LOG_INFO(...) \
+    distfs_log_write(DISTFS_LOG_INFO, __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define DISTFS_LOG_WARN(...) \
+    distfs_log_write(DISTFS_LOG_WARN, __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define DISTFS_LOG_ERROR(...) \
+    distfs_log_write(DISTFS_LOG_ERROR, __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define DISTFS_LOG_FATAL(...) \
+    distfs_log_write(DISTFS_LOG_FATAL, __FILE__, __LINE__, __func__, __VA_ARGS__)
+
+#define DISTFS_LOG_HEX(level, prefix, data, size) \
+    distfs_log_hex(level, __FILE__, __LINE__, __func__, prefix, data, size)
+
+/* ========== 内存管理API ========== */
+typedef struct distfs_memory_manager distfs_memory_manager_t;
+
+typedef struct {
+    uint64_t total_allocated;
+    uint64_t total_freed;
+    uint64_t current_usage;
+    uint64_t peak_usage;
+    uint64_t allocation_count;
+    uint64_t free_count;
+    uint64_t pool_hits;
+    uint64_t pool_misses;
+} distfs_memory_stats_t;
+
+int distfs_memory_init(void);
+void distfs_memory_cleanup(void);
+void* distfs_malloc(size_t size);
+void distfs_free(void *ptr);
+void* distfs_realloc(void *ptr, size_t new_size);
+void* distfs_calloc(size_t count, size_t size);
+int distfs_memory_get_stats(distfs_memory_stats_t *stats);
+
+/* ========== 哈希算法API ========== */
+typedef struct distfs_hash_ring distfs_hash_ring_t;
+
+uint32_t distfs_hash_crc32(const void *data, size_t len);
+uint32_t distfs_hash_fnv1a(const void *data, size_t len);
+uint32_t distfs_hash_murmur3(const void *data, size_t len, uint32_t seed);
+uint32_t distfs_hash_string(const char *str);
+uint64_t distfs_hash64(const void *data, size_t len);
+
+distfs_hash_ring_t* distfs_hash_ring_create(int virtual_nodes);
+void distfs_hash_ring_destroy(distfs_hash_ring_t *ring);
+int distfs_hash_ring_add_node(distfs_hash_ring_t *ring, const char *node_id, void *data);
+int distfs_hash_ring_remove_node(distfs_hash_ring_t *ring, const char *node_id);
+const char* distfs_hash_ring_get_node(distfs_hash_ring_t *ring, const void *key, size_t key_len);
+int distfs_hash_ring_get_nodes(distfs_hash_ring_t *ring, const void *key, size_t key_len,
+                               const char **nodes, int max_nodes);
+
+/* ========== 元数据服务器API ========== */
+typedef struct distfs_metadata_server distfs_metadata_server_t;
+
+distfs_metadata_server_t* distfs_metadata_server_create(const distfs_config_t *config);
+int distfs_metadata_server_start(distfs_metadata_server_t *server);
+int distfs_metadata_server_stop(distfs_metadata_server_t *server);
+void distfs_metadata_server_destroy(distfs_metadata_server_t *server);
+
+/* ========== 工具函数API ========== */
+const char* distfs_strerror(int error_code);
+uint64_t distfs_get_timestamp(void);
+uint64_t distfs_get_timestamp_sec(void);
+uint32_t distfs_calculate_checksum(const void *data, size_t size);
+uint32_t distfs_calculate_message_checksum(const struct distfs_message *msg);
+int distfs_validate_message(const struct distfs_message *msg);
+const char* distfs_msg_type_to_string(uint16_t type);
 
 #ifdef __cplusplus
 }
