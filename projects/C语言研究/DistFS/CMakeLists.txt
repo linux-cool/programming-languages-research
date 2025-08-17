@@ -41,7 +41,7 @@ pkg_check_modules(LIBLZ4 liblz4)
 pkg_check_modules(LIBZSTD libzstd)
 pkg_check_modules(OPENSSL openssl)
 
-# 设置源文件目录 - 只包含已实现的文件
+# 设置源文件目录 - 包含已实现的文件
 set(COMMON_SOURCES
     src/common/utils.c
     src/common/config.c
@@ -52,6 +52,16 @@ set(COMMON_SOURCES
 
 set(NETWORK_SOURCES
     src/network/network.c
+    src/network/server.c
+    src/network/client.c
+    src/network/connection_pool.c
+)
+
+set(STORAGE_SOURCES
+    src/storage/storage_node.c
+    src/storage/block_manager.c
+    src/storage/replication.c
+    src/storage/disk_io.c
 )
 
 set(METADATA_SOURCES
@@ -60,18 +70,22 @@ set(METADATA_SOURCES
 
 set(CLIENT_SOURCES
     src/client/client.c
+    src/client/file_ops.c
+    src/client/cache.c
 )
 
 # 创建静态库
 add_library(distfs_common STATIC ${COMMON_SOURCES})
 add_library(distfs_network STATIC ${NETWORK_SOURCES})
+add_library(distfs_storage STATIC ${STORAGE_SOURCES})
 add_library(distfs_metadata STATIC ${METADATA_SOURCES})
 add_library(distfs_client STATIC ${CLIENT_SOURCES})
 
 # 链接依赖
 target_link_libraries(distfs_common Threads::Threads)
 target_link_libraries(distfs_network distfs_common Threads::Threads)
-target_link_libraries(distfs_metadata distfs_common Threads::Threads)
+target_link_libraries(distfs_storage distfs_common Threads::Threads rt)
+target_link_libraries(distfs_metadata distfs_common distfs_network Threads::Threads)
 target_link_libraries(distfs_client distfs_common distfs_network Threads::Threads)
 
 # 添加可选依赖
@@ -98,6 +112,10 @@ add_executable(distfs_metadata_server src/metadata/main.c)
 target_link_libraries(distfs_metadata_server
     distfs_metadata distfs_network distfs_common)
 
+add_executable(distfs_storage_node src/storage/main.c)
+target_link_libraries(distfs_storage_node
+    distfs_storage distfs_network distfs_common)
+
 add_executable(distfs_client_tool src/client/main.c)
 target_link_libraries(distfs_client_tool
     distfs_client distfs_network distfs_common)
@@ -106,9 +124,10 @@ target_link_libraries(distfs_client_tool
 add_library(distfs SHARED
     ${COMMON_SOURCES}
     ${NETWORK_SOURCES}
+    ${STORAGE_SOURCES}
     ${CLIENT_SOURCES}
 )
-target_link_libraries(distfs Threads::Threads)
+target_link_libraries(distfs Threads::Threads rt)
 
 # 设置库版本
 set_target_properties(distfs PROPERTIES
@@ -124,8 +143,14 @@ add_executable(test_basic tests/test_basic.c)
 target_link_libraries(test_basic distfs_common distfs_network)
 add_test(NAME test_basic COMMAND test_basic)
 
+# 集成测试
+add_executable(test_integration tests/test_integration.c)
+target_link_libraries(test_integration
+    distfs_client distfs_storage distfs_metadata distfs_network distfs_common)
+add_test(NAME test_integration COMMAND test_integration)
+
 # 安装配置
-install(TARGETS distfs distfs_metadata_server distfs_client_tool
+install(TARGETS distfs distfs_metadata_server distfs_storage_node distfs_client_tool
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib

@@ -6,7 +6,7 @@
 #ifndef DISTFS_NETWORK_H
 #define DISTFS_NETWORK_H
 
-#include "distfs.h"
+#include <stdint.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -16,6 +16,7 @@ extern "C" {
 #endif
 
 /* 网络协议常量 */
+#define DISTFS_PROTOCOL_MAGIC       0x44495354  // "DIST"
 #define DISTFS_PROTOCOL_VERSION     1
 #define DISTFS_MAX_MESSAGE_SIZE     (16 * 1024 * 1024)  // 16MB
 #define DISTFS_HEADER_SIZE          16
@@ -51,6 +52,11 @@ typedef enum {
     DISTFS_MSG_SYNC_METADATA = 0x0202,
     DISTFS_MSG_REPAIR_DATA = 0x0203,
     DISTFS_MSG_MIGRATE_DATA = 0x0204,
+
+    /* 块操作消息 */
+    DISTFS_MSG_READ_BLOCK = 0x0301,
+    DISTFS_MSG_WRITE_BLOCK = 0x0302,
+    DISTFS_MSG_DELETE_BLOCK = 0x0303,
     
     /* 响应消息 */
     DISTFS_MSG_SUCCESS = 0x8000,
